@@ -1,0 +1,13 @@
+[package]
+name = "ids"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+description = "buildingSMART IDS: parse specifications and audit a model against them."
+
+[dependencies]
+ifc-model.workspace = true
+ifc-properties.workspace = true
+ifc-schema.workspace = true
