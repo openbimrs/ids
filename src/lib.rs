@@ -28,10 +28,10 @@
 //! than no audit. Results distinguish applicable-and-passed,
 //! applicable-and-failed, and not-applicable — see `openbim_core::Outcome`.
 //!
-//! # Why this is not in `packages/ifc/`
+//! # Why this is not in `packages/`
 //!
 //! IDS is a *consumer* of the IFC layer, not part of it. Nothing in
-//! `packages/ifc/` may depend on it. That one-way rule is what stops the IFC
+//! `packages/` may depend on it. That one-way rule is what stops the IFC
 //! core from accreting every standard that happens to use it.
 //!
 //! # Status
