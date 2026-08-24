@@ -1,13 +1,15 @@
 [package]
-name = "ids"
+name = "openbim-ids"
 version.workspace = true
 edition.workspace = true
 rust-version.workspace = true
 license.workspace = true
 authors.workspace = true
-description = "buildingSMART IDS: parse specifications and audit a model against them."
+repository = "https://github.com/GeneralPawz/nehirde"
+readme = "README.md"
+description = "buildingSMART IDS (Information Delivery Specification)."
+keywords = ["bim", "openbim", "ifc", "aec"]
+categories = ["parser-implementations", "data-structures"]
 
 [dependencies]
-ifc-model.workspace = true
-ifc-properties.workspace = true
-ifc-schema.workspace = true
+openbim-core.workspace = true
