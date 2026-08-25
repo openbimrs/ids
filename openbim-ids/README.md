@@ -14,9 +14,9 @@ files. It currently provides:
 - an `IdsVersion` model for supported draft/approved revisions;
 - an explicit current/approved-version contract and tests.
 
-See the [repository capability table](../README.md#status) before relying on a
-feature. Future parsing must report version-detection evidence rather than infer
-a schema revision from the shared namespace.
+See the [repository capability table](https://github.com/openbimrs/ids#status)
+before relying on a feature. Future parsing must report version-detection
+evidence rather than infer a schema revision from the shared namespace.
 
 ## Example
 
@@ -31,7 +31,8 @@ assert!(IdsVersion::CURRENT.is_approved());
 ## Architecture
 
 IDS consumes shared openBIM and, eventually, IFC contracts. IFC must never
-depend on IDS. See [`docs/architecture.md`](../docs/architecture.md).
+depend on IDS. See the
+[architecture documentation](https://github.com/openbimrs/ids/blob/main/docs/architecture.md).
 
 No ISO/CEN schema is vendored in this crate. Types may be written from legally
 accessed specifications, but standards possession does not establish a right to
