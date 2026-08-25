@@ -28,11 +28,12 @@
 //! than no audit. Results distinguish applicable-and-passed,
 //! applicable-and-failed, and not-applicable — see `openbim_core::Outcome`.
 //!
-//! # Why this is not in `packages/`
+//! # Repository boundary
 //!
-//! IDS is a *consumer* of the IFC layer, not part of it. Nothing in
-//! `packages/` may depend on it. That one-way rule is what stops the IFC
-//! core from accreting every standard that happens to use it.
+//! IDS is a *consumer* of the IFC layer, not part of it. The IFC layer must
+//! never depend on this crate. Shared vocabulary belongs in `openbim-core`, and
+//! the `openbimrs/openbim` integration repository pins compatible revisions of
+//! the repositories without reversing that dependency direction.
 //!
 //! # Status
 //!

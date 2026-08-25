@@ -1,15 +1,15 @@
 [package]
 name = "openbim-ids"
-version.workspace = true
-edition.workspace = true
-rust-version.workspace = true
-license.workspace = true
-authors.workspace = true
-repository = "https://github.com/openbimrs/openbim"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.85"
+license = "MIT"
+authors = ["point-grey"]
+repository = "https://github.com/openbimrs/ids"
 readme = "README.md"
 description = "buildingSMART IDS (Information Delivery Specification)."
 keywords = ["bim", "openbim", "ifc", "aec"]
 categories = ["parser-implementations", "data-structures"]
 
 [dependencies]
-openbim-core.workspace = true
+openbim-core = "0.1.0"

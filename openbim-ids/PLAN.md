@@ -1,31 +1,34 @@
 # openbim-ids implementation plan
 
-Status: name reserved; implementation not started.
-Last updated: 2026-08-24
+Status: name reserved; namespace/version contracts implemented; parser not started.
+Last updated: 2026-08-25
 
 This is task state, not ambient context. Follow `AGENTS.md`; claim one task ID,
-record blockers/decisions under it, and check it off only with evidence.
+record blockers/decisions under it, and check it off only with executable
+evidence.
 
 ## Established boundary
 
-openbim-core plus the IFC layer when auditing. Never depended on by the IFC layer.
+IDS consumes `openbim-core` and, when auditing is implemented, public IFC
+contracts. IFC, core, and codec must never depend on IDS.
 
-## Open work
+## Implemented scaffold
 
-See `docs/ROADMAP.md` Stage 5 for sequencing. Nothing is claimed here yet.
+- `NAMESPACE` for the namespace shared by published IDS revisions
+- `IdsVersion`, `CURRENT`, and approved-version behavior
+- unit tests for version ordering and approval
 
-## Planned file map
-
-These paths are compiled private scaffold modules. Implement inside the named
-owner and expose a public symbol only through an intentional parent re-export.
-
-- (none claimed yet)
+These are contracts, not a parser or validator.
 
 ## Work queue
 
-- [ ] `IDS-PARSE` - parse IDS with version detection returning Detected, never a silent guess
+- [ ] `IDS-VERSION-EVIDENCE` - define version evidence and disagreement reporting
+- [ ] `IDS-PARSE` - parse IDS without silently guessing the schema version
+- [ ] `IDS-WRITE` - write approved IDS 1.0 by default, with explicit legacy opt-in
+- [ ] `IDS-AUDIT` - distinguish applicable/pass/fail/not-applicable outcomes
+- [ ] `IDS-CORPUS` - verify buildingSMART pass/fail fixtures with licensed inputs
 
 ## Completion log
 
-Nothing completed yet. Record the proof command and its result here when an
-item above is checked off.
+No behavioral capability completed yet. Record the proof command and result here
+when an item above is checked off.

@@ -1,26 +1,47 @@
 # openbim-ids
 
-buildingSMART IDS (Information Delivery Specification) for Rust.
+buildingSMART IDS (Information Delivery Specification) contracts for Rust.
 
-The standard, machine-readable way to state *"this model must contain these things, with these properties"* and audit a model against it.
-
-Every published IDS version from 0.2 to 1.0 declares the **same** XML namespace, and the differences are in attribute names and cardinality — so a reader that guesses the version wrong silently produces a *different* specification. Version detection here reports its evidence rather than guessing.
+The standard, machine-readable way to state *"this model must contain these
+things, with these properties"* and audit a model against it.
 
 ## Status
 
-**Reserved.** This release establishes the crate name and its place in the
-layering. It does not parse files yet — see the crate documentation for what is
-implemented versus reserved.
+**Reserved scaffold.** Version `0.1.0` does not parse, write, or validate IDS
+files. It currently provides:
 
-No ISO/CEN schema is vendored in this crate. Types are written *from* the
-schemas; the schema files themselves are referenced out of tree, because
-possessing a copy of a standard does not establish the right to redistribute it.
+- the XML namespace shared by published IDS revisions;
+- an `IdsVersion` model for supported draft/approved revisions;
+- an explicit current/approved-version contract and tests.
 
-## Part of nehirde
+See the [repository capability table](../README.md#status) before relying on a
+feature. Future parsing must report version-detection evidence rather than infer
+a schema revision from the shared namespace.
 
-A pure-Rust IFC and openBIM toolchain: <https://github.com/GeneralPawz/nehirde>
+## Example
 
-Design rationale for the crate layout: `docs/adr/0015`.
+```rust
+use openbim_ids::{IdsVersion, NAMESPACE};
+
+assert_eq!(NAMESPACE, "http://standards.buildingsmart.org/IDS");
+assert_eq!(IdsVersion::CURRENT, IdsVersion::Ids1_0);
+assert!(IdsVersion::CURRENT.is_approved());
+```
+
+## Architecture
+
+IDS consumes shared openBIM and, eventually, IFC contracts. IFC must never
+depend on IDS. See [`docs/architecture.md`](../docs/architecture.md).
+
+No ISO/CEN schema is vendored in this crate. Types may be written from legally
+accessed specifications, but standards possession does not establish a right to
+redistribute the source schema.
+
+## OpenBIM.rs
+
+- IDS repository: <https://github.com/openbimrs/ids>
+- Integration workspace: <https://github.com/openbimrs/openbim>
+- API documentation: <https://docs.rs/openbim-ids>
 
 ## License
 
