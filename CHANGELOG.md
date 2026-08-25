@@ -9,6 +9,8 @@ and this project follows [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+- Updated CI checkout to `actions/checkout@v7`, using the supported Node 24
+  runtime and current fork-safety behavior.
 - Extracted the IDS family into its canonical standalone repository while
   preserving its OpenBIM.rs history.
 - Made package and dependency metadata independent of the integration workspace.
