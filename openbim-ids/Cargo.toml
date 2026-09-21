@@ -1,11 +1,13 @@
 [package]
 name = "openbim-ids"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 rust-version = "1.85"
 license = "AGPL-3.0-or-later"
 authors = ["point-grey"]
 repository = "https://github.com/openbimrs/ids"
+homepage = "https://github.com/openbimrs/ids"
+documentation = "https://docs.rs/openbim-ids"
 readme = "README.md"
 description = "buildingSMART IDS (Information Delivery Specification)."
 keywords = ["bim", "openbim", "ifc", "aec"]

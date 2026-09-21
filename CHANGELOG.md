@@ -7,6 +7,25 @@ and this project follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-09-21
+
+### Added
+
+- `IdsVersion::as_str`, `Display` and `FromStr`, so a version round-trips
+  through text instead of needing a `match` at every call site. `FromStr` also
+  accepts the three-component spelling the schema files carry in their own
+  `@version` attribute (`1.0.0`), which is what a version read straight out of
+  `ids.xsd` looks like.
+- `IdsVersion::ALL`, so callers can iterate published versions without
+  hand-listing variants.
+
+### Fixed
+
+- Pointed published package metadata at `openbimrs/ids`. The `0.1.0` release
+  was published from the integration workspace and its `repository` field sent
+  anyone arriving from crates.io or docs.rs to `openbimrs/openbim` instead.
+- Declared `homepage` and `documentation`, which were absent from `0.1.0`.
+
 ### Changed
 
 - Relicensed repository-authored work from MIT to `AGPL-3.0-or-later`; historical releases remain under their published MIT terms, and third-party material retains its own terms.
@@ -26,5 +45,6 @@ and this project follows [Semantic Versioning](https://semver.org/).
 - Reserved the `openbim-ids` crate name.
 - Added the IDS namespace, published-version model, and approved-version tests.
 
-[Unreleased]: https://github.com/openbimrs/ids/commits/main
+[Unreleased]: https://github.com/openbimrs/ids/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/openbimrs/ids/releases/tag/v0.1.1
 [0.1.0]: https://crates.io/crates/openbim-ids/0.1.0
