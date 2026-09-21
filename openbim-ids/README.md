@@ -46,4 +46,4 @@ redistribute the source schema.
 
 ## License
 
-AGPL-3.0-or-later
+MIT

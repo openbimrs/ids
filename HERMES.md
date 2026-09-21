@@ -15,7 +15,7 @@ success from command exit codes.
 
 ## Project conventions
 
-- Rust 2021, MSRV 1.85, AGPL-3.0-or-later.
+- Rust 2021, MSRV 1.85, MIT.
 - Pure Rust; forbid unsafe code unless a future ADR establishes a narrowly
   reviewed exception.
 - Maintain explicit dependency direction: IDS consumes core/IFC, never reverse.

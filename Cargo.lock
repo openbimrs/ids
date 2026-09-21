@@ -10,7 +10,7 @@ checksum = "34c684331685f7678a2766f3990cca967b3053a6e75ea1523e3e8449ec07217c"
 
 [[package]]
 name = "openbim-ids"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "openbim-core",
 ]

@@ -7,6 +7,13 @@ and this project follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Changed
+
+- Relicensed repository-authored work from `AGPL-3.0-or-later` back to `MIT`.
+  `0.1.1` was published under the AGPL and stays that way: a crates.io version
+  cannot be relicensed in place. `0.1.2` onwards is MIT, restoring the terms of
+  `0.1.0`. `LICENSING.md` records the per-version boundaries.
+
 ### Added
 
 - `Occurrence`, modelling IDS 0.9 `xs:occurs` and IDS 1.0 `@cardinality` as one
