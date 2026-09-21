@@ -41,7 +41,10 @@ and this project follows [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
-- Relicensed repository-authored work from MIT to `AGPL-3.0-or-later`; historical releases remain under their published MIT terms, and third-party material retains its own terms.
+- Relicensed repository-authored work from MIT to `AGPL-3.0-or-later`. The
+  `0.1.0` release remains under its published MIT terms, so `0.1.1` is not a
+  drop-in upgrade: consumers must accept the copyleft terms or stay on `0.1.0`.
+  Third-party material retains its own terms.
 - Updated CI checkout to `actions/checkout@v7`, using the supported Node 24
   runtime and current fork-safety behavior.
 - Made packaged README links archive-safe and linked the historical `0.1.0`
