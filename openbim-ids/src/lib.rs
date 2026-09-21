@@ -46,6 +46,12 @@
 
 #![forbid(unsafe_code)]
 
+pub mod occurrence;
+pub mod version;
+
+pub use occurrence::Occurrence;
+pub use version::{detect_version, Signal, VersionSignals};
+
 /// The XML namespace shared by **all** IDS versions.
 ///
 /// Deliberately a single constant: there is no per-version namespace to key

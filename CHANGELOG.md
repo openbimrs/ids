@@ -7,6 +7,19 @@ and this project follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- `Occurrence`, modelling IDS 0.9 `xs:occurs` and IDS 1.0 `@cardinality` as one
+  type so the same intent expressed in either revision produces equal typed
+  output. The schema default of *required* is explicit, since reading an absent
+  `@cardinality` as optional silently drops requirements.
+- `VersionSignals`, `Signal` and `detect_version`, resolving a document's
+  revision into `openbim_core::Detected`. A document declaring 1.0 while
+  carrying `minOccurs` on a requirement facet is reported as a conflict instead
+  of being read as 1.0 with its occurrence constraints dropped. Detection
+  consumes observations rather than XML, so it is testable before a reader
+  exists.
+
 ## [0.1.1] - 2026-09-21
 
 ### Added
