@@ -7,6 +7,8 @@ and this project follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.2] - 2026-09-21
+
 ### Changed
 
 - Relicensed repository-authored work from `AGPL-3.0-or-later` back to `MIT`.
@@ -68,6 +70,7 @@ and this project follows [Semantic Versioning](https://semver.org/).
 - Reserved the `openbim-ids` crate name.
 - Added the IDS namespace, published-version model, and approved-version tests.
 
-[Unreleased]: https://github.com/openbimrs/ids/compare/v0.1.1...HEAD
+[Unreleased]: https://github.com/openbimrs/ids/compare/v0.1.2...HEAD
+[0.1.2]: https://github.com/openbimrs/ids/releases/tag/v0.1.2
 [0.1.1]: https://github.com/openbimrs/ids/releases/tag/v0.1.1
 [0.1.0]: https://crates.io/crates/openbim-ids/0.1.0
