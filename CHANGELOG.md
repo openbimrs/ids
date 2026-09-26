@@ -7,6 +7,30 @@ and this project follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- IDS 1.0 reader: `read::from_str` and `read::from_slice` return the typed
+  `Ids` model (`model` module) or a `ReadError` with line and column. The
+  reader follows `ids.xsd` 1.0.0 strictly: element order, required elements
+  and attributes, enumerated tokens (`@cardinality`, `@relation`,
+  `@ifcVersion`, `@dataType`), `xs:date` and the `author` pattern. Schema
+  defaults are applied explicitly: an absent `@cardinality` is required and an
+  absent `minOccurs`/`maxOccurs` is `1`. Requirement facets keep document
+  order, `@ifcVersion` is split as the `xs:list` it is, and
+  `IFCRELVOIDSELEMENT IFCRELFILLSELEMENT` stays one token.
+- Version detection wired into reading: the first pass collects `Signal`s and
+  the revision `xsi:schemaLocation` declares, and refuses a pre-1.0 draft or a
+  declaration that contradicts the shape with `ErrorKind::UnsupportedVersion`
+  carrying the evidence. A document that declares nothing and shows no
+  revision-specific shape is read as 1.0 only when it satisfies the 1.0
+  schema, and reports `Detected::Inferred`.
+- `<xs:restriction>` values keep `base` (prefix resolved) and every facet in
+  its lexical form; `xs:whiteSpace`, inline `xs:simpleType` and
+  `xs:assertion` are refused as unsupported rather than dropped.
+- Corpus test (`cargo test -- --ignored corpus`, needs `IDS_TEST_CASES`): all
+  334 buildingSMART test cases read as declared IDS 1.0. The corpus is CC
+  BY-ND 4.0 and is not vendored.
+
 ## [0.1.2] - 2026-09-21
 
 ### Changed
