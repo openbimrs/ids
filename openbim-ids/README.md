@@ -7,12 +7,15 @@ things, with these properties"* and audit a model against it.
 
 ## Status
 
-**Reserved scaffold.** Version `0.1.0` does not parse, write, or validate IDS
-files. It currently provides:
+Published releases up to `0.1.2` are a reserved scaffold. Unreleased `main`
+provides:
 
 - the XML namespace shared by published IDS revisions;
-- an `IdsVersion` model for supported draft/approved revisions;
-- an explicit current/approved-version contract and tests.
+- an `IdsVersion` model, occurrence and version-evidence contracts;
+- an IDS 1.0 reader (`read::from_str`, `read::from_slice`) into a typed model,
+  which refuses drafts and contradictory declarations with their evidence.
+
+It does not write IDS or validate a model against it.
 
 See the [repository capability table](https://github.com/openbimrs/ids#status)
 before relying on a feature. Future parsing must report version-detection
