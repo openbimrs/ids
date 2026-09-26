@@ -794,7 +794,7 @@ impl<'d, 'input> Reader<'d, 'input> {
             Some((prefix, name)) => (Some(prefix), name),
             None => (None, base),
         };
-        if node.lookup_namespace_uri(prefix) == Some(XSD_NAMESPACE) && !name.is_empty() {
+        if node.lookup_namespace_uri(prefix) == Some(XSD_NAMESPACE) && XSD_TYPES.contains(&name) {
             Ok(name.to_owned())
         } else {
             Err(self.error(
@@ -802,7 +802,7 @@ impl<'d, 'input> Reader<'d, 'input> {
                 ErrorKind::InvalidValue {
                     location: "xs:restriction/@base".into(),
                     found: base.to_owned(),
-                    expected: "a type in the XML Schema namespace, such as xs:string",
+                    expected: "an XML Schema built-in simple type, such as xs:string",
                 },
             ))
         }
@@ -974,6 +974,56 @@ impl<'d, 'input> Sequence<'_, 'd, 'input> {
         }
     }
 }
+
+/// The built-in simple types of XML Schema 1.0, the revision `ids.xsd`
+/// imports. A restriction can only derive from one of these.
+const XSD_TYPES: [&str; 45] = [
+    "anySimpleType",
+    "string",
+    "normalizedString",
+    "token",
+    "language",
+    "Name",
+    "NCName",
+    "ID",
+    "IDREF",
+    "IDREFS",
+    "ENTITY",
+    "ENTITIES",
+    "NMTOKEN",
+    "NMTOKENS",
+    "boolean",
+    "decimal",
+    "integer",
+    "nonPositiveInteger",
+    "negativeInteger",
+    "long",
+    "int",
+    "short",
+    "byte",
+    "nonNegativeInteger",
+    "unsignedLong",
+    "unsignedInt",
+    "unsignedShort",
+    "unsignedByte",
+    "positiveInteger",
+    "float",
+    "double",
+    "duration",
+    "dateTime",
+    "time",
+    "date",
+    "gYearMonth",
+    "gYear",
+    "gMonthDay",
+    "gDay",
+    "gMonth",
+    "hexBinary",
+    "base64Binary",
+    "anyURI",
+    "QName",
+    "NOTATION",
+];
 
 const FACETS: [&str; 6] = [
     "entity",

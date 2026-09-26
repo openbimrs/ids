@@ -409,6 +409,12 @@ fn schema_violations_are_refused() {
             |k| matches!(k, ErrorKind::UnexpectedAttribute { .. }),
         ),
         (
+            "base is a built-in type",
+            "<entity><name><xs:restriction base=\"xs:invalid\"/></name></entity>".to_owned(),
+            String::new(),
+            |k| matches!(k, ErrorKind::InvalidValue { .. }),
+        ),
+        (
             "element-only content has no text",
             format!("{}stray", wall()),
             String::new(),
