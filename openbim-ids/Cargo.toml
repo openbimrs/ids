@@ -15,3 +15,4 @@ categories = ["parser-implementations", "data-structures"]
 
 [dependencies]
 openbim-core = "0.1.0"
+roxmltree = { version = "0.21.1", default-features = false, features = ["std", "positions"] }

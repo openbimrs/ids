@@ -16,5 +16,6 @@ keep progress, blockers, and verification evidence there.
 
 ## Status
 
-Reserved scaffold. Namespace/version contracts and their tests exist; parsing,
-writing, validation, and IFC auditing do not.
+Namespace/version contracts and the IDS 1.0 reader (`read`, `model`) exist;
+writing, validation, and IFC auditing do not. Run the corpus test with
+`IDS_TEST_CASES` pointing at a local buildingSMART IDS `TestCases` checkout.

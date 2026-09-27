@@ -37,19 +37,27 @@
 //!
 //! # Status
 //!
-//! **Reserved — no implementation.** Published to establish the name.
+//! [`read`] reads IDS 1.0 into the typed [`model`]; every document of the
+//! buildingSMART test corpus reads. Writing and auditing a model are not
+//! implemented.
 //!
-//! An oracle already exists on disk: the buildingSMART IDS test corpus carries
-//! `pass-`/`fail-` cases, so the acceptance bar for the implementation is that
-//! every `pass-` case passes and every `fail-` case fails, with not-applicable
-//! distinguished from passed.
+//! The corpus is also the acceptance bar for auditing: every `pass-` case
+//! must pass and every `fail-` case fail, with not-applicable distinguished
+//! from passed.
 
 #![forbid(unsafe_code)]
 
+pub mod model;
 pub mod occurrence;
+pub mod read;
 pub mod version;
 
+pub use model::{
+    Applicability, Attribute, Classification, Entity, Facet, Ids, IfcVersion, Info, Material,
+    PartOf, Property, Relation, Requirement, Requirements, Restriction, Specification, Value,
+};
 pub use occurrence::Occurrence;
+pub use read::{from_slice, from_str, ErrorKind, ReadError};
 pub use version::{detect_version, Signal, VersionSignals};
 
 /// The XML namespace shared by **all** IDS versions.

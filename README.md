@@ -15,21 +15,20 @@ pins this repository under `packages/ids`.
 
 ## Status
 
-The published `0.1.0` release is a **reserved scaffold**, not an IDS parser or
-validator. It establishes stable crate ownership and the version/reporting
-contracts needed by the implementation.
+Published releases up to `0.1.2` are a **reserved scaffold**. The unreleased
+`main` adds an IDS 1.0 reader; nothing validates a model against IDS yet.
 
 | Capability | Status |
 | --- | --- |
 | Shared IDS XML namespace constant | Implemented |
 | Published-version model and approved-version test | Implemented |
-| IDS XML parsing | Not implemented |
+| IDS 1.0 XML reading into a typed model | Implemented; all 334 buildingSMART test cases read, output identical to IfcOpenShell's ifctester |
 | IDS XML writing | Not implemented |
 | IFC applicability and requirement auditing | Not implemented |
-| buildingSMART pass/fail corpus conformance | Not implemented |
+| buildingSMART pass/fail corpus conformance | Reading only; auditing not implemented |
 
-No parser, writer, or validation capability should be inferred from the crate
-existing on crates.io.
+No writer or validation capability should be inferred from the crate existing
+on crates.io.
 
 ## Crates
 
