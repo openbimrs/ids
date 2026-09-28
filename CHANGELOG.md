@@ -7,6 +7,8 @@ and this project follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.3] - 2026-09-28
+
 ### Added
 
 - IDS 1.0 reader: `read::from_str` and `read::from_slice` return the typed
@@ -94,7 +96,8 @@ and this project follows [Semantic Versioning](https://semver.org/).
 - Reserved the `openbim-ids` crate name.
 - Added the IDS namespace, published-version model, and approved-version tests.
 
-[Unreleased]: https://github.com/openbimrs/ids/compare/v0.1.2...HEAD
+[Unreleased]: https://github.com/openbimrs/ids/compare/v0.1.3...HEAD
+[0.1.3]: https://github.com/openbimrs/ids/releases/tag/v0.1.3
 [0.1.2]: https://github.com/openbimrs/ids/releases/tag/v0.1.2
 [0.1.1]: https://github.com/openbimrs/ids/releases/tag/v0.1.1
 [0.1.0]: https://crates.io/crates/openbim-ids/0.1.0
