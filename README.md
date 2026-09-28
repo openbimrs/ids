@@ -15,8 +15,8 @@ pins this repository under `packages/ids`.
 
 ## Status
 
-Published releases up to `0.1.2` are a **reserved scaffold**. The unreleased
-`main` adds an IDS 1.0 reader; nothing validates a model against IDS yet.
+Published releases up to `0.1.2` are a **reserved scaffold**. `0.1.3` adds an
+IDS 1.0 reader; nothing validates a model against IDS yet.
 
 | Capability | Status |
 | --- | --- |

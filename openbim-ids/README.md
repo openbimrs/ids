@@ -7,7 +7,7 @@ things, with these properties"* and audit a model against it.
 
 ## Status
 
-Published releases up to `0.1.2` are a reserved scaffold. Unreleased `main`
+Published releases up to `0.1.2` are a reserved scaffold. `0.1.3` onwards
 provides:
 
 - the XML namespace shared by published IDS revisions;
