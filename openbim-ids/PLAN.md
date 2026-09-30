@@ -1,8 +1,8 @@
 # openbim-ids implementation plan
 
 Status: namespace, version, occurrence and version-evidence contracts and the
-IDS 1.0 reader implemented; writer and auditing not started.
-Last updated: 2026-09-26
+IDS 1.0 reader and writer implemented; auditing not started.
+Last updated: 2026-09-30
 
 This is task state, not ambient context. Follow `AGENTS.md`; claim one task ID,
 record blockers/decisions under it, and check it off only with executable
@@ -29,7 +29,7 @@ These are contracts, not a parser or validator. Nothing here reads XML.
 
 - [x] `IDS-VERSION-EVIDENCE` - define version evidence and disagreement reporting
 - [x] `IDS-PARSE` - parse IDS without silently guessing the schema version
-- [ ] `IDS-WRITE` - write approved IDS 1.0 by default, with explicit legacy opt-in
+- [x] `IDS-WRITE` - write approved IDS 1.0 (legacy drafts are refused, not written)
 - [ ] `IDS-AUDIT` - distinguish applicable/pass/fail/not-applicable outcomes
 - [ ] `IDS-CORPUS` - verify buildingSMART pass/fail fixtures with licensed inputs
 
@@ -55,6 +55,35 @@ Carried from the issue thread, to be honoured when the reader is written:
   `baseName` and attribute `name` are mixed case as they appear in the IFC file.
 
 ## Completion log
+
+### `IDS-WRITE` — 2026-09-30 (openbimrs/ids#10)
+
+`write::to_string`/`to_writer` write `model::Ids` as IDS 1.0 and refuse, with
+a typed `WriteError` and model path, anything the schema rejects plus two
+schema-valid shapes that express nothing (an applicability without facets, an
+`xs:restriction` without facets). Producer constructors (`Ids::new` declaring
+1.0, `Specification::new`, facet `new`s, `From` conversions) remove the need
+to fake `Detected` evidence. Writing legacy drafts is out of scope: only 1.0
+is approved, and the reader does not produce drafts.
+
+Proof:
+
+```
+$ IDS_TEST_CASES=.../IDS/Documentation/ImplementersDocumentation/TestCases \
+    cargo test --test corpus -- --ignored
+test corpus_every_case_reads_as_declared_ids_1_0 ... ok
+test corpus_every_case_round_trips_through_the_writer ... ok   (334 cases, fixed point)
+test written_documents_validate_against_the_official_xsd ... ok (334 + kitchen sink, negative control rejected)
+```
+
+Mutation-verified:
+
+| Mutation | Test that caught it |
+|---|---|
+| `\n` in attributes not escaped | `awkward_text_survives_everywhere`, `constructed_documents_read_back_unchanged` |
+| `\r` in text not escaped | `awkward_text_survives_everywhere`, `constructed_documents_read_back_unchanged` |
+| `cardinality="optional"` dropped | `constructed_documents_read_back_unchanged`, `output_shape_is_canonical` |
+| `minOccurs` never written | `constructed_documents_read_back_unchanged`, `schema_default_bounds_are_omitted_and_others_written` |
 
 ### `IDS-PARSE` — 2026-09-26
 
