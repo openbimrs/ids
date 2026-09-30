@@ -16,6 +16,7 @@ keep progress, blockers, and verification evidence there.
 
 ## Status
 
-Namespace/version contracts and the IDS 1.0 reader (`read`, `model`) exist;
-writing, validation, and IFC auditing do not. Run the corpus test with
-`IDS_TEST_CASES` pointing at a local buildingSMART IDS `TestCases` checkout.
+Namespace/version contracts, the IDS 1.0 reader (`read`, `model`) and writer
+(`write`) exist; validation and IFC auditing do not. Run the corpus test with
+`IDS_TEST_CASES` pointing at a local buildingSMART IDS `TestCases` checkout;
+the XSD check also needs `uv` (see `tests/corpus.rs`).

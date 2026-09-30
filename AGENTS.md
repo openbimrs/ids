@@ -1,7 +1,7 @@
 # IDS repository instructions
 
 This repository owns the OpenBIM.rs implementation of buildingSMART IDS. The
-IDS 1.0 reader is implemented and corpus-verified; do not describe writing or
+IDS 1.0 reader and writer are implemented and corpus-verified; do not describe
 IFC auditing as implemented without executable conformance evidence.
 
 ## Map

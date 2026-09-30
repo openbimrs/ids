@@ -16,25 +16,26 @@ pins this repository under `packages/ids`.
 ## Status
 
 Published releases up to `0.1.2` are a **reserved scaffold**. `0.1.3` adds an
-IDS 1.0 reader; nothing validates a model against IDS yet.
+IDS 1.0 reader, `0.1.4` an IDS 1.0 writer; nothing validates a model against
+IDS yet.
 
 | Capability | Status |
 | --- | --- |
 | Shared IDS XML namespace constant | Implemented |
 | Published-version model and approved-version test | Implemented |
 | IDS 1.0 XML reading into a typed model | Implemented; all 334 buildingSMART test cases read, output identical to IfcOpenShell's ifctester |
-| IDS XML writing | Not implemented |
+| IDS 1.0 XML writing and producer constructors | Implemented; all 334 buildingSMART test cases round-trip (`read(write(read(x))) == read(x)`) and the output validates against the official `ids.xsd` |
 | IFC applicability and requirement auditing | Not implemented |
 | buildingSMART pass/fail corpus conformance | Reading only; auditing not implemented |
 
-No writer or validation capability should be inferred from the crate existing
-on crates.io.
+No validation capability should be inferred from the crate existing on
+crates.io.
 
 ## Crates
 
 | Crate | Purpose |
 | --- | --- |
-| [`openbim-ids`](openbim-ids/) | Canonical IDS types and, in future releases, parsing and auditing |
+| [`openbim-ids`](openbim-ids/) | Canonical IDS types, IDS 1.0 reading and writing, and, in future releases, auditing |
 
 ## Install
 

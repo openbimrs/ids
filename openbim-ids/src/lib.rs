@@ -38,8 +38,11 @@
 //! # Status
 //!
 //! [`read`] reads IDS 1.0 into the typed [`model`]; every document of the
-//! buildingSMART test corpus reads. Writing and auditing a model are not
-//! implemented.
+//! buildingSMART test corpus reads. [`write`](mod@write) writes the model
+//! back as IDS 1.0 that validates against `ids.xsd`; for every corpus
+//! document, reading what it writes gives back what was read. Producers build a model
+//! with constructors such as [`Ids::new`] and [`Specification::new`], without
+//! detection evidence. Auditing a model is not implemented.
 //!
 //! The corpus is also the acceptance bar for auditing: every `pass-` case
 //! must pass and every `fail-` case fail, with not-applicable distinguished
@@ -51,6 +54,7 @@ pub mod model;
 pub mod occurrence;
 pub mod read;
 pub mod version;
+pub mod write;
 
 pub use model::{
     Applicability, Attribute, Classification, Entity, Facet, Ids, IfcVersion, Info, Material,
@@ -59,6 +63,7 @@ pub use model::{
 pub use occurrence::Occurrence;
 pub use read::{from_slice, from_str, ErrorKind, ReadError};
 pub use version::{detect_version, Signal, VersionSignals};
+pub use write::{to_string, to_writer, WriteError, WriteErrorKind};
 
 /// The XML namespace shared by **all** IDS versions.
 ///

@@ -977,7 +977,7 @@ impl<'d, 'input> Sequence<'_, 'd, 'input> {
 
 /// The built-in simple types of XML Schema 1.0, the revision `ids.xsd`
 /// imports. A restriction can only derive from one of these.
-const XSD_TYPES: [&str; 45] = [
+pub(crate) const XSD_TYPES: [&str; 45] = [
     "anySimpleType",
     "string",
     "normalizedString",
@@ -1209,7 +1209,7 @@ fn parse_non_negative(value: &str) -> Option<u64> {
 
 /// The schema's `author` pattern `[^@]+@[^\.]+\..+`, which XML Schema
 /// anchors at both ends.
-fn is_author(value: &str) -> bool {
+pub(crate) fn is_author(value: &str) -> bool {
     let Some((local, domain)) = value.split_once('@') else {
         return false;
     };
@@ -1221,7 +1221,7 @@ fn is_author(value: &str) -> bool {
 }
 
 /// The lexical form of `xs:date`: `-?YYYY-MM-DD` and an optional zone.
-fn is_xs_date(value: &str) -> bool {
+pub(crate) fn is_xs_date(value: &str) -> bool {
     let unsigned = value.strip_prefix('-').unwrap_or(value);
     let (date, zone) = match unsigned.find(['Z', '+']).or_else(|| {
         // A zone's `-` comes after the day, so search past `YYYY-MM-DD`.

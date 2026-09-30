@@ -7,6 +7,39 @@ and this project follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.4] - 2026-09-30
+
+### Added
+
+- IDS 1.0 writer: `write::to_string` and `write::to_writer` (re-exported at
+  the crate root) write the typed model as IDS 1.0 with the IDS, `xs` and
+  `xsi` namespaces and the 1.0 `xsi:schemaLocation`, in the element order
+  `ids.xsd` requires. Values are written as `<simpleValue>` or
+  `<xs:restriction>` exactly as the model holds them, requirement facets
+  always state `@cardinality`, and optional elements are omitted when
+  `None`. Text is escaped so that whitespace, `\r` and markup characters
+  read back unchanged.
+- The writer refuses, with a typed `WriteError` naming the model path, what
+  IDS 1.0 cannot express or the schema rejects: a non-1.0 or conflicting
+  version, no specifications, no IFC release, an applicability without
+  facets or out of schema order, an `<xs:restriction>` without facets or with
+  an unknown base, an `entity` requirement that is not required, an optional
+  `partOf`, `@uri` on a facet that cannot carry it, an invalid `@dataType`,
+  `author` or `date`, and characters XML 1.0 cannot represent. Nothing is
+  written to the output of `to_writer` when a model is refused.
+- Producer constructors: `Ids::new` (declares IDS 1.0; no detection evidence
+  needed), `Info::new`, `Specification::new` (optional applicability),
+  `Specification::require`, `Applicability::new` and `set_occurrence`,
+  `Requirement::new` and `with_occurrence`, `Entity::new`, `PartOf::new`,
+  `Classification::new`, `Attribute::new`, `Property::new`,
+  `Material::default`, `Restriction::new`, `enumeration` and `pattern`, and
+  `From` conversions into `Value`, `Facet` and `Requirement`.
+- Corpus tests: every buildingSMART test case satisfies
+  `read(write(read(x))) == read(x)`, writing is a fixed point, and the
+  written documents validate against the official `ids.xsd` through
+  `scripts/validate-ids.py` (`xmlschema`), with a negative control proving
+  the validator rejects.
+
 ## [0.1.3] - 2026-09-28
 
 ### Added
@@ -96,7 +129,8 @@ and this project follows [Semantic Versioning](https://semver.org/).
 - Reserved the `openbim-ids` crate name.
 - Added the IDS namespace, published-version model, and approved-version tests.
 
-[Unreleased]: https://github.com/openbimrs/ids/compare/v0.1.3...HEAD
+[Unreleased]: https://github.com/openbimrs/ids/compare/v0.1.4...HEAD
+[0.1.4]: https://github.com/openbimrs/ids/releases/tag/v0.1.4
 [0.1.3]: https://github.com/openbimrs/ids/releases/tag/v0.1.3
 [0.1.2]: https://github.com/openbimrs/ids/releases/tag/v0.1.2
 [0.1.1]: https://github.com/openbimrs/ids/releases/tag/v0.1.1

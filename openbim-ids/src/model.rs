@@ -34,6 +34,22 @@ pub struct Ids {
     pub specifications: Vec<Specification>,
 }
 
+impl Ids {
+    /// A new IDS 1.0 document with no specifications yet.
+    ///
+    /// The version is [`Detected::Declared`]: a producer states the revision
+    /// it writes, so there is no detection evidence to fake. Push at least one
+    /// [`Specification`] before [writing](mod@crate::write).
+    #[must_use]
+    pub fn new(info: Info) -> Ids {
+        Ids {
+            version: Detected::Declared(IdsVersion::Ids1_0),
+            info,
+            specifications: Vec::new(),
+        }
+    }
+}
+
 /// The `<info>` block. Only `title` is required by the schema.
 #[derive(Debug, Clone, Default, PartialEq, Eq)]
 pub struct Info {
@@ -53,6 +69,17 @@ pub struct Info {
     pub purpose: Option<String>,
     /// `<milestone>`.
     pub milestone: Option<String>,
+}
+
+impl Info {
+    /// Metadata with a title and nothing else.
+    #[must_use]
+    pub fn new(title: impl Into<String>) -> Info {
+        Info {
+            title: title.into(),
+            ..Info::default()
+        }
+    }
 }
 
 /// One `<specification>`.
@@ -77,6 +104,39 @@ pub struct Specification {
 }
 
 impl Specification {
+    /// A specification of the given IFC releases with an empty, optional
+    /// applicability and no requirements.
+    ///
+    /// Optional (`minOccurs="0" maxOccurs="unbounded"`) means the
+    /// requirements apply to whatever objects match, and a model with none
+    /// passes. Use [`Applicability::set_occurrence`] to demand or prohibit
+    /// applicable objects. Add at least one applicability facet before
+    /// [writing](mod@crate::write).
+    #[must_use]
+    pub fn new(
+        name: impl Into<String>,
+        ifc_versions: impl IntoIterator<Item = IfcVersion>,
+    ) -> Self {
+        Specification {
+            name: name.into(),
+            ifc_versions: ifc_versions.into_iter().collect(),
+            identifier: None,
+            description: None,
+            instructions: None,
+            applicability: Applicability::new(Occurrence::Optional),
+            requirements: None,
+        }
+    }
+
+    /// Appends a requirement, creating `<requirements>` if absent.
+    pub fn require(&mut self, requirement: impl Into<Requirement>) -> &mut Self {
+        self.requirements
+            .get_or_insert_with(Requirements::default)
+            .facets
+            .push(requirement.into());
+        self
+    }
+
     /// How many applicable objects the specification demands.
     ///
     /// Lowered from the applicability's `minOccurs`/`maxOccurs`: `0..0` is
@@ -138,6 +198,30 @@ pub struct Applicability {
 }
 
 impl Applicability {
+    /// An applicability without facets and with the bounds `occurrence`
+    /// spells, see [`Applicability::set_occurrence`].
+    #[must_use]
+    pub fn new(occurrence: Occurrence) -> Applicability {
+        let mut applicability = Applicability {
+            min_occurs: 1,
+            max_occurs: None,
+            facets: Vec::new(),
+        };
+        applicability.set_occurrence(occurrence);
+        applicability
+    }
+
+    /// Sets the bounds to spell `occurrence`: required is `1..unbounded`,
+    /// optional `0..unbounded`, prohibited `0..0`.
+    pub fn set_occurrence(&mut self, occurrence: Occurrence) -> &mut Self {
+        (self.min_occurs, self.max_occurs) = match occurrence {
+            Occurrence::Required => (1, None),
+            Occurrence::Optional => (0, None),
+            Occurrence::Prohibited => (0, Some(0)),
+        };
+        self
+    }
+
     /// The occurrence the bounds spell, see [`Specification::occurrence`].
     #[must_use]
     pub fn occurrence(&self) -> Occurrence {
@@ -146,7 +230,7 @@ impl Applicability {
 }
 
 /// `<requirements>`.
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, Default, PartialEq)]
 pub struct Requirements {
     /// `@description`.
     pub description: Option<String>,
@@ -170,6 +254,31 @@ pub struct Requirement {
     pub instructions: Option<String>,
 }
 
+impl Requirement {
+    /// A required facet with no `uri` or `instructions`.
+    #[must_use]
+    pub fn new(facet: impl Into<Facet>) -> Requirement {
+        Requirement::with_occurrence(facet, Occurrence::Required)
+    }
+
+    /// A facet with the given cardinality and no `uri` or `instructions`.
+    #[must_use]
+    pub fn with_occurrence(facet: impl Into<Facet>, occurrence: Occurrence) -> Requirement {
+        Requirement {
+            facet: facet.into(),
+            occurrence,
+            uri: None,
+            instructions: None,
+        }
+    }
+}
+
+impl<F: Into<Facet>> From<F> for Requirement {
+    fn from(facet: F) -> Requirement {
+        Requirement::new(facet)
+    }
+}
+
 /// A facet: one condition on an object.
 #[derive(Debug, Clone, PartialEq)]
 pub enum Facet {
@@ -186,6 +295,25 @@ pub enum Facet {
     /// `<material>`: an assigned material.
     Material(Material),
 }
+
+macro_rules! facet_from {
+    ($($kind:ident),*) => {$(
+        impl From<$kind> for Facet {
+            fn from(facet: $kind) -> Facet {
+                Facet::$kind(facet)
+            }
+        }
+    )*};
+}
+
+facet_from!(
+    Entity,
+    PartOf,
+    Classification,
+    Attribute,
+    Property,
+    Material
+);
 
 impl Facet {
     /// The element name of the facet, e.g. `"partOf"`.
@@ -211,6 +339,17 @@ pub struct Entity {
     pub predefined_type: Option<Value>,
 }
 
+impl Entity {
+    /// An entity facet without a predefined type.
+    #[must_use]
+    pub fn new(name: impl Into<Value>) -> Entity {
+        Entity {
+            name: name.into(),
+            predefined_type: None,
+        }
+    }
+}
+
 /// `<partOf>`.
 #[derive(Debug, Clone, PartialEq)]
 pub struct PartOf {
@@ -218,6 +357,17 @@ pub struct PartOf {
     pub entity: Entity,
     /// `@relation`; `None` means any of them.
     pub relation: Option<Relation>,
+}
+
+impl PartOf {
+    /// A `partOf` facet following any relation.
+    #[must_use]
+    pub fn new(entity: Entity) -> PartOf {
+        PartOf {
+            entity,
+            relation: None,
+        }
+    }
 }
 
 /// A relationship a `partOf` facet can follow.
@@ -280,6 +430,17 @@ pub struct Classification {
     pub system: Value,
 }
 
+impl Classification {
+    /// Any reference in the given system.
+    #[must_use]
+    pub fn new(system: impl Into<Value>) -> Classification {
+        Classification {
+            value: None,
+            system: system.into(),
+        }
+    }
+}
+
 /// `<attribute>`.
 #[derive(Debug, Clone, PartialEq)]
 pub struct Attribute {
@@ -287,6 +448,17 @@ pub struct Attribute {
     pub name: Value,
     /// `<value>`. `None` means any non-empty value.
     pub value: Option<Value>,
+}
+
+impl Attribute {
+    /// The attribute with any non-empty value.
+    #[must_use]
+    pub fn new(name: impl Into<Value>) -> Attribute {
+        Attribute {
+            name: name.into(),
+            value: None,
+        }
+    }
 }
 
 /// `<property>`.
@@ -302,8 +474,21 @@ pub struct Property {
     pub data_type: Option<String>,
 }
 
-/// `<material>`.
-#[derive(Debug, Clone, PartialEq)]
+impl Property {
+    /// The property with any non-empty value and no data type.
+    #[must_use]
+    pub fn new(property_set: impl Into<Value>, base_name: impl Into<Value>) -> Property {
+        Property {
+            property_set: property_set.into(),
+            base_name: base_name.into(),
+            value: None,
+            data_type: None,
+        }
+    }
+}
+
+/// `<material>`. [`Material::default`] is any material.
+#[derive(Debug, Clone, Default, PartialEq)]
 pub struct Material {
     /// `<value>`, a material or material category name. `None` means any.
     pub value: Option<Value>,
@@ -317,6 +502,24 @@ pub enum Value {
     Simple(String),
     /// `<xs:restriction>`.
     Restriction(Box<Restriction>),
+}
+
+impl From<&str> for Value {
+    fn from(value: &str) -> Value {
+        Value::Simple(value.to_owned())
+    }
+}
+
+impl From<String> for Value {
+    fn from(value: String) -> Value {
+        Value::Simple(value)
+    }
+}
+
+impl From<Restriction> for Value {
+    fn from(restriction: Restriction) -> Value {
+        Value::Restriction(Box::new(restriction))
+    }
 }
 
 impl Value {
@@ -367,4 +570,40 @@ pub struct Restriction {
     pub total_digits: Option<u64>,
     /// `<xs:fractionDigits>`.
     pub fraction_digits: Option<u64>,
+}
+
+impl Restriction {
+    /// A restriction of `base` without facets, e.g. `Restriction::new("string")`.
+    ///
+    /// Add at least one facet before [writing](mod@crate::write); a restriction
+    /// without facets is refused.
+    #[must_use]
+    pub fn new(base: impl Into<String>) -> Restriction {
+        Restriction {
+            base: base.into(),
+            ..Restriction::default()
+        }
+    }
+
+    /// An `xs:string` restriction to one of `values`.
+    #[must_use]
+    pub fn enumeration<I, S>(values: I) -> Restriction
+    where
+        I: IntoIterator<Item = S>,
+        S: Into<String>,
+    {
+        Restriction {
+            enumeration: values.into_iter().map(Into::into).collect(),
+            ..Restriction::new("string")
+        }
+    }
+
+    /// An `xs:string` restriction to an XML Schema regular expression.
+    #[must_use]
+    pub fn pattern(pattern: impl Into<String>) -> Restriction {
+        Restriction {
+            patterns: vec![pattern.into()],
+            ..Restriction::new("string")
+        }
+    }
 }
