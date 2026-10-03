@@ -19,19 +19,22 @@ provides:
 validates against `ids.xsd` and reads back as the model it was given, and
 constructors for building a document from scratch.
 
-`0.2.0` adds `audit()` behind the `audit` feature: it reports, with stable
-codes, what in an IDS document cannot work for its listed IFC releases, such
-as unknown entities or attributes, values that cannot be cast to the IFC type,
-and properties that contradict the standard property set templates.
+`0.2.0` adds `audit()`: it reports, with stable codes, what in an IDS
+document cannot work for its listed IFC releases, such as unknown entities or
+attributes, values that cannot be cast to the IFC type, and properties that
+contradict the standard property set templates. Two features enable it:
+
+| Feature | Checks | Adds dependencies under |
+| --- | --- | --- |
+| `audit-schema` (0.2.1+) | everything except standard `Pset_`/`Qto_` sets | AGPL-3.0-or-later (`ifc-schema`) |
+| `audit` | everything | AGPL-3.0-or-later and CC BY-ND 4.0 (`ifc-template-catalog` template data) |
 
 ```toml
-openbim-ids = { version = "0.2", features = ["audit"] }
+openbim-ids = { version = "0.2.1", features = ["audit-schema"] }
 ```
 
-**Licence note:** `audit` pulls in `ifc-schema` and `ifc-template-catalog`,
-licensed AGPL-3.0-or-later (template data also CC BY-ND 4.0). Enabling the
-feature puts those terms on the resulting work; without it the crate and its
-dependencies are MIT.
+**Licence note:** enabling either feature puts those terms on the resulting
+work; without them the crate and its dependencies are MIT.
 
 It does not check an IFC model against IDS. Requires Rust 1.88.
 

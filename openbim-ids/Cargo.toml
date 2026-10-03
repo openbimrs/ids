@@ -1,6 +1,6 @@
 [package]
 name = "openbim-ids"
-version = "0.2.0"
+version = "0.2.1"
 edition = "2021"
 rust-version = "1.88"
 license = "MIT"
@@ -16,20 +16,25 @@ categories = ["parser-implementations", "data-structures"]
 [dependencies]
 openbim-core = "0.1.0"
 roxmltree = { version = "0.21.1", default-features = false, features = ["std", "positions"] }
-# `audit` only. AGPL-3.0-or-later (and CC-BY-ND-4.0 template data): enabling
-# the feature puts those terms on the resulting work; see LICENSING.md.
-ifc-schema = { version = "0.2.4", optional = true }
+# Audit features only. `ifc-schema` is AGPL-3.0-or-later; `ifc-template-catalog`
+# is AGPL-3.0-or-later AND CC-BY-ND-4.0 (embedded template data). Enabling a
+# feature puts those terms on the resulting work; see LICENSING.md.
+ifc-schema = { version = "0.3.1", optional = true, default-features = false, features = ["ifc2x3", "ifc4", "ifc4x3"] }
 ifc-template-catalog = { version = "0.2.1", optional = true, default-features = false, features = ["embedded"] }
 regex = { version = "1.11", optional = true, default-features = false, features = ["std", "unicode"] }
 
 [features]
 default = []
-## Audit IDS documents against the IFC schemas of their listed releases.
-audit = ["dep:ifc-schema", "dep:ifc-template-catalog", "dep:regex"]
+## Audit IDS documents against the IFC schemas of their listed releases,
+## without the standard property set templates (AGPL-3.0-or-later only).
+audit-schema = ["dep:ifc-schema", "dep:regex"]
+## `audit-schema` plus the standard Pset_/Qto_ template checks
+## (adds CC-BY-ND-4.0 template data).
+audit = ["audit-schema", "dep:ifc-template-catalog"]
 
 [[example]]
 name = "audit_dir"
-required-features = ["audit"]
+required-features = ["audit-schema"]
 
 [package.metadata.docs.rs]
 all-features = true

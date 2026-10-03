@@ -32,11 +32,17 @@ to this project.
 
 ## The `audit` feature
 
-The `openbim-ids` crate is MIT with or without features. Its optional `audit`
-feature (from `0.2.0`) depends on `ifc-schema` and `ifc-template-catalog`,
-which are licensed **AGPL-3.0-or-later**; the template catalog additionally
-embeds buildingSMART property and quantity set data under **CC BY-ND 4.0**.
-Enabling `audit` therefore subjects the combined work to those terms. The
+The `openbim-ids` crate is MIT with or without features. Its optional audit
+features pull in copyleft dependencies:
+
+- `audit-schema` (from `0.2.1`) depends on `ifc-schema`, licensed
+  **AGPL-3.0-or-later**.
+- `audit` (from `0.2.0`) adds `ifc-template-catalog`, also
+  **AGPL-3.0-or-later**, which embeds buildingSMART property and quantity set
+  data under **CC BY-ND 4.0**.
+
+Enabling either subjects the combined work to those terms. A consumer whose
+policy rejects CC BY-ND 4.0 can use `audit-schema`. The
 reader, writer and model need no feature and carry no copyleft dependency.
 
 `src/audit/mapping.rs` records the entity names of the IDS implementers'

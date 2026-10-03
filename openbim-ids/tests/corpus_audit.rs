@@ -7,7 +7,7 @@
 //! "regardless of IFC contents"; each must be reported with the codes listed
 //! here. Every `pass-` and `fail-` case must audit clean.
 
-#![cfg(feature = "audit")]
+#![cfg(feature = "audit-schema")]
 
 use std::collections::BTreeSet;
 use std::path::{Path, PathBuf};

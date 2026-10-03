@@ -44,7 +44,7 @@
 //! with constructors such as [`Ids::new`] and [`Specification::new`], without
 //! detection evidence.
 //!
-//! With the `audit` feature, [`audit()`] checks a document against the IFC
+//! With the `audit-schema` or `audit` feature, [`audit()`] checks a document against the IFC
 //! schemas of its listed releases (entities, predefined types, attributes,
 //! value types, data types, standard property sets, `partOf` relations): see
 //! [`mod@audit`]. The feature depends on AGPL-3.0-or-later crates.
@@ -56,7 +56,7 @@
 
 #![forbid(unsafe_code)]
 
-#[cfg(feature = "audit")]
+#[cfg(feature = "audit-schema")]
 pub mod audit;
 pub mod model;
 pub mod occurrence;
@@ -64,7 +64,7 @@ pub mod read;
 pub mod version;
 pub mod write;
 
-#[cfg(feature = "audit")]
+#[cfg(feature = "audit-schema")]
 pub use audit::{audit, AuditCode, AuditFinding, Severity};
 pub use model::{
     Applicability, Attribute, Classification, Entity, Facet, Ids, IfcVersion, Info, Material,

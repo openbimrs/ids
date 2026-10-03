@@ -26,16 +26,17 @@ against IDS yet.
 | Published-version model and approved-version test | Implemented |
 | IDS 1.0 XML reading into a typed model | Implemented; all 334 buildingSMART test cases read, output identical to IfcOpenShell's ifctester |
 | IDS 1.0 XML writing and producer constructors | Implemented; all 334 buildingSMART test cases round-trip (`read(write(read(x))) == read(x)`) and the output validates against the official `ids.xsd` |
-| Auditing an IDS document against the IFC schemas of its listed releases (`audit` feature) | Implemented; every buildingSMART `invalid-` case is reported with its expected code and all 307 `pass-`/`fail-` cases audit clean |
+| Auditing an IDS document against the IFC schemas of its listed releases (`audit-schema`; `audit` adds standard property set templates) | Implemented; every buildingSMART `invalid-` case is reported with its expected code and all 307 `pass-`/`fail-` cases audit clean |
 | Checking an IFC model against IDS (applicability and requirements) | Not implemented |
 | buildingSMART pass/fail corpus conformance | Reading, writing and document audit; model checking not implemented |
 
 No IFC-model validation capability should be inferred from the crate existing
 on crates.io.
 
-The `audit` feature depends on `ifc-schema` and `ifc-template-catalog`, which
-are licensed AGPL-3.0-or-later (the template data additionally CC BY-ND 4.0).
-The crate itself stays MIT; see [`LICENSING.md`](LICENSING.md).
+The audit features depend on AGPL-3.0-or-later crates: `audit-schema` on
+`ifc-schema`, and `audit` additionally on `ifc-template-catalog`, whose
+template data is also CC BY-ND 4.0. The crate itself stays MIT; see
+[`LICENSING.md`](LICENSING.md).
 
 ## Crates
 

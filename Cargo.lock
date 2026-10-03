@@ -72,30 +72,10 @@ dependencies = [
 ]
 
 [[package]]
-name = "core_detect"
-version = "1.0.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7f8f80099a98041a3d1622845c271458a2d73e688351bf3cb999266764b81d48"
-
-[[package]]
 name = "crunchy"
 version = "0.2.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "460fbee9c2c2f33933d720630a6a0bac33ba7053db5344fac858d4b8952d77d5"
-
-[[package]]
-name = "encoding_rs"
-version = "0.8.42"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8e985e0451871ad22fb8d2b6b076e2028a502a0d3950998c2c5c0a4f9b5d9679"
-dependencies = [
- "cfg-if",
- "core_detect",
- "multiversion_no_op",
- "rustversion",
- "scopeguard",
- "simdutf8",
-]
 
 [[package]]
 name = "getrandom"
@@ -122,13 +102,12 @@ dependencies = [
 
 [[package]]
 name = "ifc-schema"
-version = "0.2.4"
+version = "0.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9d460b95d3b829296cd2243da4b7f7ab3f592bf65ff79721395228f1b1e61e30"
+checksum = "94fa5071f69910a31abb12c32fa8cba8b774cfc70bc98bd1b4f5a6464a390ea4"
 dependencies = [
  "ahash",
  "bincode",
- "openbim-step",
  "thiserror",
 ]
 
@@ -155,12 +134,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "cf8baf1c55e62ffcace7a9f06f4bd9cd3f0c4beb022d3b367256b91b87513d98"
 
 [[package]]
-name = "multiversion_no_op"
-version = "1.0.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "743fb55ba31b18fb1ecef6bdc9aa2743314978ac084044301a7eee33fb99a20d"
-
-[[package]]
 name = "once_cell"
 version = "1.21.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -174,22 +147,13 @@ checksum = "34c684331685f7678a2766f3990cca967b3053a6e75ea1523e3e8449ec07217c"
 
 [[package]]
 name = "openbim-ids"
-version = "0.2.0"
+version = "0.2.1"
 dependencies = [
  "ifc-schema",
  "ifc-template-catalog",
  "openbim-core",
  "regex",
  "roxmltree",
-]
-
-[[package]]
-name = "openbim-step"
-version = "0.5.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "41421f8f2d8880c87e45726ce668efabf9dc8638e7fa4006d2fc84fa416e5ff8"
-dependencies = [
- "encoding_rs",
 ]
 
 [[package]]
@@ -255,18 +219,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "rustversion"
-version = "1.0.23"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "cf54715a573b99ac80df0bc206da022bcd442c974952c7b9720069370852e21f"
-
-[[package]]
-name = "scopeguard"
-version = "1.2.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "94143f37725109f92c262ed2cf5e59bce7498c01bcc1502d7b9afe439a4e9f49"
-
-[[package]]
 name = "serde"
 version = "1.0.229"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -294,12 +246,6 @@ dependencies = [
  "quote",
  "syn 3.0.6",
 ]
-
-[[package]]
-name = "simdutf8"
-version = "0.1.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e3a9fe34e3e7a50316060351f37187a3f546bce95496156754b601a5fa71b76e"
 
 [[package]]
 name = "syn"
