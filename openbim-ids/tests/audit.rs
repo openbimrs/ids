@@ -1,7 +1,8 @@
 //! One small hand-written document per audit check, with a near-miss that
-//! must stay clean.
+//! must stay clean. The standard set checks need `audit`; the rest run with
+//! `audit-schema`.
 
-#![cfg(feature = "audit")]
+#![cfg(feature = "audit-schema")]
 
 use openbim_ids::{
     audit, Attribute, AuditCode, Entity, Facet, Ids, IfcVersion, Info, PartOf, Property, Relation,
@@ -403,6 +404,7 @@ fn data_types_must_be_ifc_types_of_the_release() {
 }
 
 #[test]
+#[cfg(feature = "audit")]
 fn standard_sets_are_checked_against_their_templates() {
     let check = |set: &str, name: &str, data_type: Option<&str>| {
         codes(&ids(
@@ -499,6 +501,23 @@ fn findings_locate_the_offending_facet() {
         "error [attribute-unknown] specifications[1]/requirements/facets[0]/name (IFC4): \
          IFCWALL has no explicit attribute ActingRole in IFC4"
     );
+}
+
+/// Without the template catalog, standard sets are not judged at all.
+#[test]
+#[cfg(not(feature = "audit"))]
+fn standard_sets_are_not_judged_without_templates() {
+    let found = codes(&ids(
+        IFC4,
+        vec![entity("IFCWALL")],
+        vec![property(
+            "Pset_RabbitCommon",
+            "Ears",
+            Some("IFCLABEL"),
+            None,
+        )],
+    ));
+    assert!(found.is_empty(), "{found:?}");
 }
 
 #[test]

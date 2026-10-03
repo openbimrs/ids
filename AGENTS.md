@@ -26,8 +26,9 @@ the Cargo process status.
 ## Boundaries
 
 - IDS may depend on released `openbim-core` contracts and public IFC
-  contracts. IFC crates are AGPL-3.0-or-later: keep them behind an optional
-  feature (`audit`) so the default crate stays MIT-only.
+  contracts. IFC crates are AGPL-3.0-or-later: keep them behind optional
+  features (`audit-schema`, `audit`) so the default crate stays MIT-only, and
+  keep the CC BY-ND template catalog out of `audit-schema`.
 - IFC and lower-level codec/core crates must never depend on IDS.
 - Do not vendor ISO, CEN, or other schema files without verified redistribution
   rights.

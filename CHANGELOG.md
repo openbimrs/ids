@@ -7,6 +7,22 @@ and this project follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.2.1] - 2026-10-03
+
+### Added
+
+- `audit-schema` feature: every audit check except the standard
+  `Pset_`/`Qto_` set checks, without `ifc-template-catalog` and its
+  CC BY-ND 4.0 template data. `audit` is now `audit-schema` plus the
+  template checks, so existing `audit` users see no change.
+
+### Changed
+
+- The audit uses `ifc-schema` 0.3 (was 0.2.4), with only the IFC2X3, IFC4 and
+  IFC4X3 tables enabled, so a workspace already on `ifc-schema` 0.3 links one
+  copy. No `ifc-schema` type is part of this crate's API, and the findings
+  over the buildingSMART corpus are identical.
+
 ## [0.2.0] - 2026-10-03
 
 ### Added
@@ -159,7 +175,8 @@ and this project follows [Semantic Versioning](https://semver.org/).
 - Reserved the `openbim-ids` crate name.
 - Added the IDS namespace, published-version model, and approved-version tests.
 
-[Unreleased]: https://github.com/openbimrs/ids/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/openbimrs/ids/compare/v0.2.1...HEAD
+[0.2.1]: https://github.com/openbimrs/ids/releases/tag/v0.2.1
 [0.2.0]: https://github.com/openbimrs/ids/releases/tag/v0.2.0
 [0.1.4]: https://github.com/openbimrs/ids/releases/tag/v0.1.4
 [0.1.3]: https://github.com/openbimrs/ids/releases/tag/v0.1.3

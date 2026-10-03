@@ -59,7 +59,8 @@ Carried from the issue thread, to be honoured when the reader is written:
 
 ### `IDS-DOC-AUDIT` — 2026-10-03 (openbimrs/ids#11)
 
-`audit::audit` behind the `audit` feature, on `ifc-schema` (entities,
+`audit::audit` behind the `audit-schema` feature (0.2.1; `audit` adds the
+template checks), on `ifc-schema` 0.3 (entities,
 attributes, derived names, types) and `ifc-template-catalog` (official
 PSD/QTO templates). Decisions, each from corpus evidence:
 

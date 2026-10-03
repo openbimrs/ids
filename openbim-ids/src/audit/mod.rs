@@ -6,11 +6,19 @@
 //! equal. A checker finds those late, as silent non-matches. [`audit`] finds
 //! them up front, per specification and per listed `ifcVersion`.
 //!
-//! Requires the `audit` feature. The IFC schema tables come from
-//! [`ifc_schema`] and the standard property and quantity set templates from
-//! [`ifc_template_catalog`], both licensed AGPL-3.0-or-later (the template
-//! data additionally CC BY-ND 4.0); enabling the feature puts those terms on
-//! the resulting work. The reader and writer do not need it.
+//! # Features
+//!
+//! - `audit-schema` runs every check against the IFC schema tables of
+//!   `ifc-schema` (AGPL-3.0-or-later).
+//! - `audit` adds the standard property and quantity set checks
+//!   ([`AuditCode::PropertyNotInStandardSet`],
+//!   [`AuditCode::PropertyDataTypeMismatch`],
+//!   [`AuditCode::StandardSetUnknown`]) against the official templates of
+//!   `ifc-template-catalog`, which embeds buildingSMART template data under
+//!   CC BY-ND 4.0 in addition to AGPL-3.0-or-later.
+//!
+//! Enabling either puts those terms on the resulting work. The reader and
+//! writer need neither.
 //!
 //! # What is checked
 //!
@@ -31,8 +39,8 @@
 //!   attribute's declared type or a property's `dataType`. `xs:pattern` only
 //!   applies to strings;
 //! - property `dataType`s are IFC defined (or enumeration) types of the
-//!   release; in a standard `Pset_`/`Qto_` set the property exists and has
-//!   that type;
+//!   release; with `audit`, in a standard `Pset_`/`Qto_` set the property
+//!   exists and has that type;
 //! - `partOf` names a whole the relation can have;
 //! - a prohibited specification carries no requirements, and occurrence and
 //!   restriction bounds are not contradictory.
@@ -56,7 +64,9 @@ use std::collections::BTreeSet;
 use std::sync::OnceLock;
 
 use ifc_schema::{Schema, TypeKind};
+#[cfg(feature = "audit")]
 use ifc_template_catalog::catalog::Catalog;
+#[cfg(feature = "audit")]
 use ifc_template_catalog::definition::{
     CatalogEdition, PropertyKind, QuantityKind, SetTemplateKind,
 };
@@ -268,6 +278,7 @@ pub fn audit(ids: &Ids) -> Vec<AuditFinding> {
 struct Release {
     version: IfcVersion,
     schema: &'static Schema,
+    #[cfg(feature = "audit")]
     templates: Option<Catalog>,
     /// Upper-case entity names, plus for IFC2X3 the mapped IFC4 names.
     entities: Vec<String>,
@@ -275,25 +286,13 @@ struct Release {
 
 fn release(version: IfcVersion) -> &'static Release {
     static RELEASES: [OnceLock<Release>; 3] = [OnceLock::new(), OnceLock::new(), OnceLock::new()];
-    let (slot, schema, edition) = match version {
-        IfcVersion::Ifc2x3 => (
-            0,
-            ifc_schema::ifc2x3 as fn() -> _,
-            CatalogEdition::Ifc2x3Tc1,
-        ),
-        IfcVersion::Ifc4 => (
-            1,
-            ifc_schema::ifc4 as fn() -> _,
-            CatalogEdition::Ifc4Add2Tc1,
-        ),
-        IfcVersion::Ifc4x3Add2 => (
-            2,
-            ifc_schema::ifc4x3 as fn() -> _,
-            CatalogEdition::Ifc4x3Add2,
-        ),
+    let (slot, schema): (usize, fn() -> &'static Schema) = match version {
+        IfcVersion::Ifc2x3 => (0, ifc_schema::ifc2x3),
+        IfcVersion::Ifc4 => (1, ifc_schema::ifc4),
+        IfcVersion::Ifc4x3Add2 => (2, ifc_schema::ifc4x3),
     };
     RELEASES[slot].get_or_init(|| {
-        let schema: &'static Schema = schema();
+        let schema = schema();
         let mut entities: BTreeSet<String> =
             schema.entity_names().map(str::to_ascii_uppercase).collect();
         if version == IfcVersion::Ifc2x3 {
@@ -306,10 +305,22 @@ fn release(version: IfcVersion) -> &'static Release {
         Release {
             version,
             schema,
-            templates: ifc_template_catalog::embedded::official_catalog(edition).ok(),
+            #[cfg(feature = "audit")]
+            templates: templates(version),
             entities: entities.into_iter().collect(),
         }
     })
+}
+
+/// The official standard set templates of a release.
+#[cfg(feature = "audit")]
+fn templates(version: IfcVersion) -> Option<Catalog> {
+    let edition = match version {
+        IfcVersion::Ifc2x3 => CatalogEdition::Ifc2x3Tc1,
+        IfcVersion::Ifc4 => CatalogEdition::Ifc4Add2Tc1,
+        IfcVersion::Ifc4x3Add2 => CatalogEdition::Ifc4x3Add2,
+    };
+    ifc_template_catalog::embedded::official_catalog(edition).ok()
 }
 
 impl Release {
@@ -801,9 +812,11 @@ impl Auditor {
         if let Some(value) = &property.value {
             self.value(&format!("{path}/value"), version, value, &kinds);
         }
+        #[cfg(feature = "audit")]
         self.standard_set(release, path, property);
     }
 
+    #[cfg(feature = "audit")]
     fn standard_set(&mut self, release: &Release, path: &str, property: &Property) {
         let Some(catalog) = &release.templates else {
             return;
@@ -1096,6 +1109,7 @@ fn values(facet: &Facet) -> Vec<(&'static str, &Value)> {
 }
 
 /// The IDS `dataType` a standard property template states, upper case.
+#[cfg(feature = "audit")]
 fn property_data_type(kind: &PropertyKind) -> Option<String> {
     let data_type = match kind {
         PropertyKind::SingleValue { data_type }
@@ -1108,6 +1122,7 @@ fn property_data_type(kind: &PropertyKind) -> Option<String> {
 }
 
 /// The IDS `dataType` of a standard quantity's value.
+#[cfg(feature = "audit")]
 fn quantity_data_type(kind: QuantityKind) -> Option<String> {
     let name = match kind {
         QuantityKind::Length => "IFCLENGTHMEASURE",
