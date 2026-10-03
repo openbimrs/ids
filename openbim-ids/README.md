@@ -19,7 +19,21 @@ provides:
 validates against `ids.xsd` and reads back as the model it was given, and
 constructors for building a document from scratch.
 
-It does not validate a model against IDS.
+`0.2.0` adds `audit()` behind the `audit` feature: it reports, with stable
+codes, what in an IDS document cannot work for its listed IFC releases, such
+as unknown entities or attributes, values that cannot be cast to the IFC type,
+and properties that contradict the standard property set templates.
+
+```toml
+openbim-ids = { version = "0.2", features = ["audit"] }
+```
+
+**Licence note:** `audit` pulls in `ifc-schema` and `ifc-template-catalog`,
+licensed AGPL-3.0-or-later (template data also CC BY-ND 4.0). Enabling the
+feature puts those terms on the resulting work; without it the crate and its
+dependencies are MIT.
+
+It does not check an IFC model against IDS. Requires Rust 1.88.
 
 See the [repository capability table](https://github.com/openbimrs/ids#status)
 before relying on a feature. Future parsing must report version-detection

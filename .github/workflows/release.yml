@@ -53,11 +53,11 @@ jobs:
           git fetch --quiet origin main
           git merge-base --is-ancestor HEAD origin/main \
             || { echo "::error::$TAG is not on main"; exit 1; }
-      - name: Install Rust 1.85
+      - name: Install Rust 1.88
         # The same pin as ci.yml, so the release gate is the CI gate.
-        uses: dtolnay/rust-toolchain@3230091d7ef9483f601620abacc570c22cf44d22 # 1.85.0
+        uses: dtolnay/rust-toolchain@94ec8bc822f50f94d0e68501cff2eb388c550726 # 1.88.0
         with:
-          toolchain: 1.85.0
+          toolchain: 1.88.0
           components: rustfmt, clippy
       - name: Require the tag to name the crate's version
         id: plan
@@ -90,10 +90,10 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ env.TAG }}
-      - name: Install Rust 1.85
-        uses: dtolnay/rust-toolchain@3230091d7ef9483f601620abacc570c22cf44d22 # 1.85.0
+      - name: Install Rust 1.88
+        uses: dtolnay/rust-toolchain@94ec8bc822f50f94d0e68501cff2eb388c550726 # 1.88.0
         with:
-          toolchain: 1.85.0
+          toolchain: 1.88.0
       - name: Check whether this version is already live
         # Re-running a partly failed release finishes it instead of failing
         # on what already succeeded.

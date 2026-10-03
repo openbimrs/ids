@@ -30,6 +30,19 @@ and above. As copyright holder the author may additionally grant MIT terms for
 The `ids` crate name on crates.io belongs to a different owner and is unrelated
 to this project.
 
+## The `audit` feature
+
+The `openbim-ids` crate is MIT with or without features. Its optional `audit`
+feature (from `0.2.0`) depends on `ifc-schema` and `ifc-template-catalog`,
+which are licensed **AGPL-3.0-or-later**; the template catalog additionally
+embeds buildingSMART property and quantity set data under **CC BY-ND 4.0**.
+Enabling `audit` therefore subjects the combined work to those terms. The
+reader, writer and model need no feature and carry no copyleft dependency.
+
+`src/audit/mapping.rs` records the entity names of the IDS implementers'
+IFC2X3 occurrence/type mapping table (buildingSMART IDS documentation,
+CC BY-ND 4.0) as facts; no text of that document is reproduced.
+
 ## Third-party material
 
 Dependencies, standards, schemas, catalogs, fixtures, generated material, and

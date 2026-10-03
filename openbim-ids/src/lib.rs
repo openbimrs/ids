@@ -42,7 +42,13 @@
 //! back as IDS 1.0 that validates against `ids.xsd`; for every corpus
 //! document, reading what it writes gives back what was read. Producers build a model
 //! with constructors such as [`Ids::new`] and [`Specification::new`], without
-//! detection evidence. Auditing a model is not implemented.
+//! detection evidence.
+//!
+//! With the `audit` feature, [`audit()`] checks a document against the IFC
+//! schemas of its listed releases (entities, predefined types, attributes,
+//! value types, data types, standard property sets, `partOf` relations): see
+//! [`mod@audit`]. The feature depends on AGPL-3.0-or-later crates.
+//! Checking an IFC *model* against IDS is not implemented.
 //!
 //! The corpus is also the acceptance bar for auditing: every `pass-` case
 //! must pass and every `fail-` case fail, with not-applicable distinguished
@@ -50,12 +56,16 @@
 
 #![forbid(unsafe_code)]
 
+#[cfg(feature = "audit")]
+pub mod audit;
 pub mod model;
 pub mod occurrence;
 pub mod read;
 pub mod version;
 pub mod write;
 
+#[cfg(feature = "audit")]
+pub use audit::{audit, AuditCode, AuditFinding, Severity};
 pub use model::{
     Applicability, Attribute, Classification, Entity, Facet, Ids, IfcVersion, Info, Material,
     PartOf, Property, Relation, Requirement, Requirements, Restriction, Specification, Value,

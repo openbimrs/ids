@@ -7,6 +7,36 @@ and this project follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-10-03
+
+### Added
+
+- `audit` feature: `audit(&Ids) -> Vec<AuditFinding>` checks a document
+  against the IFC schemas of each specification's listed `ifcVersion`s.
+  Every finding has a stable `AuditCode` (`as_str`, e.g. `entity-unknown`), a
+  `Severity`, the specification index, a facet path and, where it depends on
+  the release, the `IfcVersion`. Checks: entity names (upper case, defined by
+  the release, IFC2X3 occurrence/type mapping honoured, patterns match
+  something), predefined types only where the entity or its type has one,
+  requirement entities the applicability can select, explicit (not derived
+  or inverse) attributes, values only on single-valued attributes, values
+  castable to the attribute type or property `dataType`, patterns only on
+  strings, `dataType`s that are IFC defined or enumeration types, standard
+  `Pset_`/`Qto_` set membership and data types, `partOf` wholes the relation
+  allows, prohibited specifications without requirements, and contradictory
+  occurrence or restriction bounds. XSD patterns are evaluated with the
+  `regex` crate; constructs it cannot express are reported as
+  `pattern-unverified` warnings.
+- Corpus test `corpus_audit`: every buildingSMART `invalid-` case reports its
+  expected codes and every `pass-`/`fail-` case audits clean.
+- `audit_dir` example printing the findings for a directory of `.ids` files.
+
+### Changed
+
+- Minimum supported Rust version is now 1.88 (required by `ifc-schema`).
+- The `audit` feature depends on AGPL-3.0-or-later crates (template data also
+  CC BY-ND 4.0); the crate remains MIT. See `LICENSING.md`.
+
 ## [0.1.4] - 2026-09-30
 
 ### Added
@@ -129,7 +159,8 @@ and this project follows [Semantic Versioning](https://semver.org/).
 - Reserved the `openbim-ids` crate name.
 - Added the IDS namespace, published-version model, and approved-version tests.
 
-[Unreleased]: https://github.com/openbimrs/ids/compare/v0.1.4...HEAD
+[Unreleased]: https://github.com/openbimrs/ids/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/openbimrs/ids/releases/tag/v0.2.0
 [0.1.4]: https://github.com/openbimrs/ids/releases/tag/v0.1.4
 [0.1.3]: https://github.com/openbimrs/ids/releases/tag/v0.1.3
 [0.1.2]: https://github.com/openbimrs/ids/releases/tag/v0.1.2
