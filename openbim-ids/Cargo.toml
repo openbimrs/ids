@@ -1,8 +1,8 @@
 [package]
 name = "openbim-ids"
-version = "0.1.4"
+version = "0.2.0"
 edition = "2021"
-rust-version = "1.85"
+rust-version = "1.88"
 license = "MIT"
 authors = ["point-grey"]
 repository = "https://github.com/openbimrs/ids"
@@ -16,3 +16,20 @@ categories = ["parser-implementations", "data-structures"]
 [dependencies]
 openbim-core = "0.1.0"
 roxmltree = { version = "0.21.1", default-features = false, features = ["std", "positions"] }
+# `audit` only. AGPL-3.0-or-later (and CC-BY-ND-4.0 template data): enabling
+# the feature puts those terms on the resulting work; see LICENSING.md.
+ifc-schema = { version = "0.2.4", optional = true }
+ifc-template-catalog = { version = "0.2.1", optional = true, default-features = false, features = ["embedded"] }
+regex = { version = "1.11", optional = true, default-features = false, features = ["std", "unicode"] }
+
+[features]
+default = []
+## Audit IDS documents against the IFC schemas of their listed releases.
+audit = ["dep:ifc-schema", "dep:ifc-template-catalog", "dep:regex"]
+
+[[example]]
+name = "audit_dir"
+required-features = ["audit"]
+
+[package.metadata.docs.rs]
+all-features = true

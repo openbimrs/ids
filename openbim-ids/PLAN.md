@@ -1,8 +1,8 @@
 # openbim-ids implementation plan
 
 Status: namespace, version, occurrence and version-evidence contracts and the
-IDS 1.0 reader and writer implemented; auditing not started.
-Last updated: 2026-09-30
+IDS 1.0 reader, writer and document audit implemented; model checking not started.
+Last updated: 2026-10-03
 
 This is task state, not ambient context. Follow `AGENTS.md`; claim one task ID,
 record blockers/decisions under it, and check it off only with executable
@@ -30,7 +30,8 @@ These are contracts, not a parser or validator. Nothing here reads XML.
 - [x] `IDS-VERSION-EVIDENCE` - define version evidence and disagreement reporting
 - [x] `IDS-PARSE` - parse IDS without silently guessing the schema version
 - [x] `IDS-WRITE` - write approved IDS 1.0 (legacy drafts are refused, not written)
-- [ ] `IDS-AUDIT` - distinguish applicable/pass/fail/not-applicable outcomes
+- [x] `IDS-DOC-AUDIT` - audit IDS documents against the IFC schemas (#11)
+- [ ] `IDS-AUDIT` - check IFC models: distinguish applicable/pass/fail/not-applicable outcomes
 - [ ] `IDS-CORPUS` - verify buildingSMART pass/fail fixtures with licensed inputs
 
 ### `IDS-PARSE` notes
@@ -55,6 +56,54 @@ Carried from the issue thread, to be honoured when the reader is written:
   `baseName` and attribute `name` are mixed case as they appear in the IFC file.
 
 ## Completion log
+
+### `IDS-DOC-AUDIT` — 2026-10-03 (openbimrs/ids#11)
+
+`audit::audit` behind the `audit` feature, on `ifc-schema` (entities,
+attributes, derived names, types) and `ifc-template-catalog` (official
+PSD/QTO templates). Decisions, each from corpus evidence:
+
+- Predefined type *values* are not checked: user-defined values are valid
+  (`pass-a_predefined_type_may_specify_a_user_defined_object_type`). What is
+  checked is that the entity, or its type entity, has a `PredefinedType` at
+  all (`invalid-a_group_predefined_type_must_match_exactly_1_2` lists IFC2X3,
+  where `IfcInventory` has none).
+- IFC2X3 accepts the IFC4 names of the implementers' occurrence/type mapping
+  table (`pass-in_ifc2x3_an_airterminal_…`).
+- Enumeration types are valid `dataType`s
+  (`pass-predefined_properties_are_supported_but_discouraged_1_2`).
+- `partOf` wholes given as a pattern are not judged; a pattern may match
+  allowed and disallowed entities alike.
+- Not checked: whether an entity is an `IfcObject` or type (attribute facets
+  apply to resource entities such as `IfcPerson`), and enumerated attribute
+  values.
+
+Proof:
+
+```
+$ IDS_TEST_CASES=… cargo test --features audit --test corpus_audit -- --ignored
+test invalid_cases_are_reported_and_the_rest_audit_clean ... ok   (27 invalid with expected codes; 307 clean)
+$ cargo test --features audit --test audit      # 22 hand-written documents, one or more per code
+```
+
+Beyond the corpus, the audit was run over the other buildingSMART examples
+and the IDS-Audit-tool's valid fixtures. Its findings there were judged
+genuine: `IDS_oma_input.ids` uses `IFCLINEARVELOCITYMEASURE` for
+`Pset_ElementKinematics.MaximumConstantSpeed` (`IfcVelocityMeasure` in the
+IFC4X3 ADD2 templates) and `ElevationOfFFLRelative`, absent from the official
+ADD2 `Pset_BuildingStoreyCommon`; the Aachen example writes the attribute
+`name` in lower case; an Audit-tool fixture uses `IfcDoor`.
+
+Mutation-verified:
+
+| Mutation | Test that caught it |
+|---|---|
+| derived attributes not checked | `derived_attributes_are_reported` |
+| IFC2X3 mapping table ignored | `ifc2x3_accepts_the_mapped_ifc4_occurrence_names` |
+| type entity's PredefinedType ignored | `predefined_types_need_an_entity_that_has_one` |
+| `IFCRELASSIGNSTOGROUP` accepts any object | `part_of_relations_need_a_fitting_whole` |
+| booleans case-insensitive | `property_values_must_cast_to_the_data_type` |
+| exclusive bounds treated as inclusive | `contradictory_restrictions_are_reported` |
 
 ### `IDS-WRITE` — 2026-09-30 (openbimrs/ids#10)
 

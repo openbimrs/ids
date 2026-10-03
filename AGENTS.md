@@ -1,8 +1,9 @@
 # IDS repository instructions
 
 This repository owns the OpenBIM.rs implementation of buildingSMART IDS. The
-IDS 1.0 reader and writer are implemented and corpus-verified; do not describe
-IFC auditing as implemented without executable conformance evidence.
+IDS 1.0 reader, writer and document audit are implemented and corpus-verified;
+do not describe checking IFC models as implemented without executable
+conformance evidence.
 
 ## Map
 
@@ -24,8 +25,9 @@ the Cargo process status.
 
 ## Boundaries
 
-- IDS may depend on released `openbim-core` contracts and, when auditing is
-  implemented, public IFC contracts.
+- IDS may depend on released `openbim-core` contracts and public IFC
+  contracts. IFC crates are AGPL-3.0-or-later: keep them behind an optional
+  feature (`audit`) so the default crate stays MIT-only.
 - IFC and lower-level codec/core crates must never depend on IDS.
 - Do not vendor ISO, CEN, or other schema files without verified redistribution
   rights.

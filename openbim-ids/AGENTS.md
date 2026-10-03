@@ -17,6 +17,7 @@ keep progress, blockers, and verification evidence there.
 ## Status
 
 Namespace/version contracts, the IDS 1.0 reader (`read`, `model`) and writer
-(`write`) exist; validation and IFC auditing do not. Run the corpus test with
+(`write`) exist, and the document audit (`audit`, feature `audit`, on
+AGPL-3.0 `ifc-schema`); checking IFC models against IDS does not. Run the corpus test with
 `IDS_TEST_CASES` pointing at a local buildingSMART IDS `TestCases` checkout;
 the XSD check also needs `uv` (see `tests/corpus.rs`).

@@ -3,7 +3,7 @@
 [![CI](https://github.com/openbimrs/ids/actions/workflows/ci.yml/badge.svg)](https://github.com/openbimrs/ids/actions/workflows/ci.yml)
 [![crates.io](https://img.shields.io/crates/v/openbim-ids.svg)](https://crates.io/crates/openbim-ids)
 [![docs.rs](https://docs.rs/openbim-ids/badge.svg)](https://docs.rs/openbim-ids)
-[![MSRV](https://img.shields.io/badge/MSRV-1.85-blue)](https://www.rust-lang.org)
+[![MSRV](https://img.shields.io/badge/MSRV-1.88-blue)](https://www.rust-lang.org)
 
 Pure-Rust infrastructure for the buildingSMART Information Delivery
 Specification (IDS): the machine-readable way to state what an IFC model must
@@ -16,8 +16,9 @@ pins this repository under `packages/ids`.
 ## Status
 
 Published releases up to `0.1.2` are a **reserved scaffold**. `0.1.3` adds an
-IDS 1.0 reader, `0.1.4` an IDS 1.0 writer; nothing validates a model against
-IDS yet.
+IDS 1.0 reader, `0.1.4` an IDS 1.0 writer, `0.2.0` an audit of IDS documents
+against the IFC schema (feature `audit`); nothing validates an IFC model
+against IDS yet.
 
 | Capability | Status |
 | --- | --- |
@@ -25,17 +26,22 @@ IDS yet.
 | Published-version model and approved-version test | Implemented |
 | IDS 1.0 XML reading into a typed model | Implemented; all 334 buildingSMART test cases read, output identical to IfcOpenShell's ifctester |
 | IDS 1.0 XML writing and producer constructors | Implemented; all 334 buildingSMART test cases round-trip (`read(write(read(x))) == read(x)`) and the output validates against the official `ids.xsd` |
-| IFC applicability and requirement auditing | Not implemented |
-| buildingSMART pass/fail corpus conformance | Reading only; auditing not implemented |
+| Auditing an IDS document against the IFC schemas of its listed releases (`audit` feature) | Implemented; every buildingSMART `invalid-` case is reported with its expected code and all 307 `pass-`/`fail-` cases audit clean |
+| Checking an IFC model against IDS (applicability and requirements) | Not implemented |
+| buildingSMART pass/fail corpus conformance | Reading, writing and document audit; model checking not implemented |
 
-No validation capability should be inferred from the crate existing on
-crates.io.
+No IFC-model validation capability should be inferred from the crate existing
+on crates.io.
+
+The `audit` feature depends on `ifc-schema` and `ifc-template-catalog`, which
+are licensed AGPL-3.0-or-later (the template data additionally CC BY-ND 4.0).
+The crate itself stays MIT; see [`LICENSING.md`](LICENSING.md).
 
 ## Crates
 
 | Crate | Purpose |
 | --- | --- |
-| [`openbim-ids`](openbim-ids/) | Canonical IDS types, IDS 1.0 reading and writing, and, in future releases, auditing |
+| [`openbim-ids`](openbim-ids/) | Canonical IDS types, IDS 1.0 reading and writing, and document auditing against the IFC schema |
 
 ## Install
 
@@ -78,7 +84,7 @@ fixtures must have redistribution terms compatible with this repository.
 
 ## Development
 
-Requires Rust `1.85` or newer.
+Requires Rust `1.88` or newer.
 
 ```bash
 git clone https://github.com/openbimrs/ids.git
