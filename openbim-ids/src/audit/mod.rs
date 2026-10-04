@@ -110,7 +110,10 @@ pub enum AuditCode {
     PredefinedTypeUnavailable,
     /// `entity-requirement-contradicts-applicability`: no object the
     /// applicability selects can be the entity the requirement demands.
-    /// Subtypes do not count; IDS matches entity names exactly.
+    /// Subtypes do not count; IDS matches entity names exactly. In IFC2X3 a
+    /// name of the occurrence/type mapping table overlaps its occurrence
+    /// class (`IFCAIRTERMINAL` is an `IFCFLOWTERMINAL` with an
+    /// `IFCAIRTERMINALTYPE`).
     EntityRequirementContradictsApplicability,
     /// `attribute-unknown`: the applicable entity has no such explicit
     /// attribute (inverse attributes are not checkable).
@@ -324,6 +327,33 @@ fn templates(version: IfcVersion) -> Option<Catalog> {
 }
 
 impl Release {
+    /// Whether one object can match both entity names exactly.
+    ///
+    /// Equal names can. In IFC2X3, a name of the occurrence/type mapping
+    /// table is an occurrence class narrowed by its type entity, so it and
+    /// that occurrence class (`IFCAIRTERMINAL`, `IFCFLOWTERMINAL`) describe
+    /// overlapping objects. Two mapped names never do, even with a shared
+    /// occurrence class: their type entities differ.
+    fn can_be(&self, one: &str, other: &str) -> bool {
+        if one == other {
+            return true;
+        }
+        if self.version != IfcVersion::Ifc2x3 {
+            return false;
+        }
+        let occurrence = |name: &str| {
+            mapping::IFC2X3_OCCURRENCE_TYPES
+                .iter()
+                .find(|(mapped, _, _)| *mapped == name)
+                .map(|(_, occurrence, _)| *occurrence)
+        };
+        match (occurrence(one), occurrence(other)) {
+            (Some(occurrence), None) => occurrence == other,
+            (None, Some(occurrence)) => occurrence == one,
+            _ => false,
+        }
+    }
+
     fn has_entity(&self, name: &str) -> bool {
         self.entities
             .binary_search_by(|e| e.as_str().cmp(name))
@@ -563,7 +593,9 @@ impl Auditor {
                         if let (Some(required), Some(applicable)) = (&required, &applicable) {
                             if !required.is_empty()
                                 && !applicable.is_empty()
-                                && required.iter().all(|r| !applicable.contains(r))
+                                && !required
+                                    .iter()
+                                    .any(|r| applicable.iter().any(|a| release.can_be(r, a)))
                             {
                                 self.report(
                                     AuditCode::EntityRequirementContradictsApplicability,

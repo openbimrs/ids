@@ -7,6 +7,18 @@ and this project follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.2.2] - 2026-10-04
+
+### Fixed
+
+- `entity-requirement-contradicts-applicability` honours the IFC2X3
+  occurrence/type mapping table (#15): for IFC2X3 a mapped name such as
+  `IFCAIRTERMINAL` overlaps its occurrence class `IFCFLOWTERMINAL` in either
+  direction, so a specification applying to one and requiring the other is
+  no longer reported. Two mapped names sharing an occurrence class
+  (`IFCLAMP`, `IFCAIRTERMINAL`) and other releases are unchanged. Findings
+  over the buildingSMART corpus are identical.
+
 ## [0.2.1] - 2026-10-03
 
 ### Added
@@ -175,7 +187,8 @@ and this project follows [Semantic Versioning](https://semver.org/).
 - Reserved the `openbim-ids` crate name.
 - Added the IDS namespace, published-version model, and approved-version tests.
 
-[Unreleased]: https://github.com/openbimrs/ids/compare/v0.2.1...HEAD
+[Unreleased]: https://github.com/openbimrs/ids/compare/v0.2.2...HEAD
+[0.2.2]: https://github.com/openbimrs/ids/releases/tag/v0.2.2
 [0.2.1]: https://github.com/openbimrs/ids/releases/tag/v0.2.1
 [0.2.0]: https://github.com/openbimrs/ids/releases/tag/v0.2.0
 [0.1.4]: https://github.com/openbimrs/ids/releases/tag/v0.1.4
