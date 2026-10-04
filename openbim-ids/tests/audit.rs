@@ -135,6 +135,44 @@ fn a_required_entity_must_be_one_the_applicability_selects() {
 }
 
 #[test]
+fn ifc2x3_mapped_names_overlap_their_occurrence_class() {
+    // openbimrs/ids#15: checkable exactly in IFC2X3, in both directions.
+    for (applies, requires) in [
+        ("IFCFLOWTERMINAL", "IFCAIRTERMINAL"),
+        ("IFCAIRTERMINAL", "IFCFLOWTERMINAL"),
+    ] {
+        let found = codes(&ids(IFC2X3, vec![entity(applies)], vec![entity(requires)]));
+        assert!(found.is_empty(), "{applies} -> {requires}: {found:?}");
+    }
+    // IFC4 defines IfcAirTerminal itself: no overlap with IfcFlowTerminal.
+    let found = codes(&ids(
+        IFC4,
+        vec![entity("IFCFLOWTERMINAL")],
+        vec![entity("IFCAIRTERMINAL")],
+    ));
+    assert_eq!(
+        found,
+        [(
+            AuditCode::EntityRequirementContradictsApplicability,
+            Some(IfcVersion::Ifc4)
+        )]
+    );
+    // A different occurrence class, or two mapped names sharing one, stay
+    // contradictions.
+    for (applies, requires) in [("IFCWALL", "IFCAIRTERMINAL"), ("IFCLAMP", "IFCAIRTERMINAL")] {
+        let found = codes(&ids(IFC2X3, vec![entity(applies)], vec![entity(requires)]));
+        assert_eq!(
+            found,
+            [(
+                AuditCode::EntityRequirementContradictsApplicability,
+                Some(IfcVersion::Ifc2x3)
+            )],
+            "{applies} -> {requires}"
+        );
+    }
+}
+
+#[test]
 fn attributes_must_be_explicit_attributes_of_the_entity() {
     let found = codes(&ids(
         IFC4,
