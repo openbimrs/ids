@@ -3,7 +3,7 @@
 [![CI](https://github.com/openbimrs/ids/actions/workflows/ci.yml/badge.svg)](https://github.com/openbimrs/ids/actions/workflows/ci.yml)
 [![crates.io](https://img.shields.io/crates/v/openbim-ids.svg)](https://crates.io/crates/openbim-ids)
 [![docs.rs](https://docs.rs/openbim-ids/badge.svg)](https://docs.rs/openbim-ids)
-[![MSRV](https://img.shields.io/badge/MSRV-1.88-blue)](https://www.rust-lang.org)
+[![MSRV](https://img.shields.io/badge/MSRV-1.99-blue)](https://www.rust-lang.org)
 
 Pure-Rust infrastructure for the buildingSMART Information Delivery
 Specification (IDS): the machine-readable way to state what an IFC model must
@@ -85,7 +85,7 @@ fixtures must have redistribution terms compatible with this repository.
 
 ## Development
 
-Requires Rust `1.88` or newer.
+Requires Rust `1.99` or newer.
 
 ```bash
 git clone https://github.com/openbimrs/ids.git

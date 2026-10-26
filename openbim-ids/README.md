@@ -36,7 +36,7 @@ openbim-ids = { version = "0.2.1", features = ["audit-schema"] }
 **Licence note:** enabling either feature puts those terms on the resulting
 work; without them the crate and its dependencies are MIT.
 
-It does not check an IFC model against IDS. Requires Rust 1.88.
+It does not check an IFC model against IDS. Requires Rust 1.99.
 
 See the [repository capability table](https://github.com/openbimrs/ids#status)
 before relying on a feature. Future parsing must report version-detection

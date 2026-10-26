@@ -7,6 +7,10 @@ and this project follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Changed
+
+- Raise MSRV to Rust 1.99.
+
 ## [0.2.2] - 2026-10-04
 
 ### Fixed
